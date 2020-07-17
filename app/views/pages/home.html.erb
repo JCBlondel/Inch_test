@@ -1,0 +1,55 @@
+<h1>Import Page</h1>
+
+<h2>Persons</h2>
+<table>
+  <thead>
+    <tr>
+      <th>Reference</th>
+      <th>Email</th>
+      <th>Home Phone Number</th>
+      <th>Mobile Phone Number</th>
+      <th>Firstname</th>
+      <th>Lastname</th>
+      <th>Address</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% Person.last(10).each do |person| %>
+      <tr>
+        <th><%= person.reference %></th>
+        <th><%= person.email %></th>
+        <th><%= person.home_phone_number %></th>
+        <th><%= person.mobile_phone_number %></th>
+        <th><%= person.firstname %></th>
+        <th><%= person.lastname %></th>
+        <th><%= person.address %></th>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<h2>Buildings</h2>
+<table>
+  <thead>
+    <tr>
+      <th>Reference</th>
+      <th>Address</th>
+      <th>Zip code</th>
+      <th>City</th>
+      <th>Country</th>
+      <th>Manager name</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% Building.last(10).each do |person| %>
+      <tr>
+        <th><%= building.reference %></th>
+        <th><%= building.address %></th>
+        <th><%= building.zipcode %></th>
+        <th><%= building.city %></th>
+        <th><%= building.country %></th>
+        <th><%= building.manager_name %></th>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
