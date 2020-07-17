@@ -6,7 +6,6 @@ RSpec.describe Import do
 
   describe "Attributes:" do
     it { is_expected.to(have_attr_accessor(:errors)) }
-    it { is_expected.to(have_attr_reader(:csv)) }
     it { is_expected.to(have_attr_reader(:file)) }
     it { is_expected.to(have_attr_reader(:target_model)) }
   end
