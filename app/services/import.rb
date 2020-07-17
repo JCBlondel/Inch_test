@@ -19,7 +19,7 @@ class Import
   protected
 
   def header_checking
-    @target_model = case file.split.first.split(',')
+    @target_model = case File.open(file, &:readline).strip.split(',')
     when %w[reference address zip_code city country manager_name]
       Building
     when %w[reference firstname lastname home_phone_number mobile_phone_number email address]
