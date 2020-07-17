@@ -1,4 +1,15 @@
 <h1>Import Page</h1>
+<% flash.each do |type, msg| %>
+  <div>
+    <%= msg %>
+  </div>
+<% end %>
+
+<%= form_with url: [:import] do |f| %>
+  <%= f.label :file_to_import, 'CSV file to import :' %>
+  <%= f.file_field :file_to_import %>
+  <%= f.submit 'Start importation' %>
+<% end %>
 
 <h2>Persons</h2>
 <table>
