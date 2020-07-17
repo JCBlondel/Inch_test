@@ -52,11 +52,11 @@
     </tr>
   </thead>
   <tbody>
-    <% Building.last(10).each do |person| %>
+    <% Building.last(10).each do |building| %>
       <tr>
         <th><%= building.reference %></th>
         <th><%= building.address %></th>
-        <th><%= building.zipcode %></th>
+        <th><%= building.zip_code %></th>
         <th><%= building.city %></th>
         <th><%= building.country %></th>
         <th><%= building.manager_name %></th>
