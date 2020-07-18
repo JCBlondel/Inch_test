@@ -40,29 +40,8 @@ class Import
 
   def start_import
     items = read_csv_as_items
-    instances_already_present = target_model.where(reference: items.pluck('reference'))
-    references_to_skip = instances_already_present.map(&:reference)
-    instances_to_create = []
-    instances_to_update = []
-
-    items.select do |item|
-      if references_to_skip.include?(item['reference'])
-        instances_to_update << item
-      else
-        instances_to_create << item
-      end
-    end
-
-    if instances_to_create.any?
-      target_model.insert_all(instances_to_create.map { |attributes|
-        attributes.merge!(created_at: Time.now, updated_at: Time.now)
-      }, unique_by: ['reference'])
-    end
-
-    if instances_to_update.any?
-      target_model.upsert_all(instances_to_update.map { |attributes|
-        attributes.merge!(created_at: Time.now, updated_at: Time.now)
-      }, unique_by: %i[reference])
-    end
+    target_model.upsert_all(items.map { |attributes|
+      attributes.merge!(created_at: Time.now, updated_at: Time.now)
+    }, unique_by: %i[reference])
   end
 end
