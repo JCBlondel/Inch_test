@@ -42,6 +42,6 @@ class Import
     items = read_csv_as_items
     target_model.upsert_all(items.map { |attributes|
       attributes.merge!(created_at: Time.now, updated_at: Time.now)
-    }, unique_by: %i[reference])
+    }, unique_by: :reference)
   end
 end
