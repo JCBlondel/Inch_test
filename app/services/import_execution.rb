@@ -3,10 +3,14 @@ require 'csv'
 class ImportExecution
   attr_reader :items
   attr_reader :csv_file
+  attr_reader :primary_attributes
+  attr_reader :target_model
 
   def initialize(csv_file:)
     @csv_file = csv_file
     @items = []
+    @primary_attributes = set_primary_attributes
+    @target_model = set_target_model
   end
 
   def perform
@@ -22,12 +26,12 @@ class ImportExecution
     end
   end
 
-  def primary_attributes
-    raise "ImportExecution #primary_attributes called but unset !"
+  def set_primary_attributes
+    nil
   end
 
-  def target_model
-    raise "ImportExecution #target_model called but unset !"
+  def set_target_model
+    nil
   end
 
   def start_import

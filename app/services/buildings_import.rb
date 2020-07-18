@@ -1,11 +1,11 @@
 class BuildingsImport < ImportExecution
   private
 
-  def primary_attributes
+  def set_primary_attributes
     %[manager_name]
   end
 
-  def target_model
+  def set_target_model
     Building
   end
 end
