@@ -8,10 +8,10 @@ class Import
   end
 
   def perform
-    case File.open(file, &:readline).strip.split(',')
-    when %w[reference address zip_code city country manager_name]
+    case File.open(file, &:readline).strip.split(',').sort
+    when %w[reference address zip_code city country manager_name].sort
       BuildingsImport.new(csv_file: file).perform
-    when %w[reference firstname lastname home_phone_number mobile_phone_number email address]
+    when %w[reference firstname lastname home_phone_number mobile_phone_number email address].sort
       PeopleImport.new(csv_file: file).perform
     else
       errors << ['Wrong header']
