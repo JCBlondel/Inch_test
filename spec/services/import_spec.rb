@@ -5,7 +5,7 @@ RSpec.describe Import do
   let(:csv_file) { file_fixture('people.csv') }
 
   describe "Attributes:" do
-    it { is_expected.to(have_attr_accessor(:errors)) }
+    it { is_expected.to(have_attr_reader(:errors)) }
     it { is_expected.to(have_attr_reader(:file)) }
     it { is_expected.to(have_attr_reader(:target_model)) }
   end

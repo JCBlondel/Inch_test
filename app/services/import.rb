@@ -1,7 +1,7 @@
 require 'csv'
 
 class Import
-  attr_accessor :errors
+  attr_reader :errors
   attr_reader :file
   attr_reader :target_model
 
@@ -40,8 +40,19 @@ class Import
 
   def start_import
     items = read_csv_as_items
-    target_model.upsert_all(items.map { |attributes|
-      attributes.merge!(created_at: Time.now, updated_at: Time.now)
-    }, unique_by: :reference)
+    people_attributes = []
+    items.each do |person|
+      person_attributes = {}
+      person.each do |key, value|
+        if %w[email home_phone_number mobile_phone_number address].include?(key)
+          person_attributes.merge!(key => value) unless people_attributes.find { |person| person[key] == value }
+        else
+          person_attributes.merge!(key => value)
+        end
+      end
+      target_model.upsert(person_attributes.merge!(created_at: Time.now, updated_at: Time.now),
+                          unique_by: :reference)
+      people_attributes << person_attributes
+    end
   end
 end
