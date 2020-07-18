@@ -11,14 +11,14 @@ class Import
   end
 
   def perform
-    header_checking
-    starting_import unless errors.any?
+    check_header
+    start_import unless errors.any?
     self
   end
 
   protected
 
-  def header_checking
+  def check_header
     @target_model = case File.open(file, &:readline).strip.split(',')
     when %w[reference address zip_code city country manager_name]
       Building
@@ -30,16 +30,39 @@ class Import
     end
   end
 
-  def starting_import
-    csv = CSV.new(file, headers: true)
-    while row = csv.shift
-      create_entry(attributes: row.to_h)
+  def read_csv_as_items
+    items = []
+    CSV.foreach(file, headers: true) do |row|
+      items << row.to_h
     end
+    items
   end
 
-  def create_entry(attributes:)
-    target_model.create!(attributes)
-  rescue ActiveRecord::RecordInvalid => e
-    target_model.update(attributes)
+  def start_import
+    items = read_csv_as_items
+    instances_already_present = target_model.where(reference: items.pluck('reference'))
+    references_to_skip = instances_already_present.map(&:reference)
+    instances_to_create = []
+    instances_to_update = []
+
+    items.select do |item|
+      if references_to_skip.include?(item['reference'])
+        instances_to_update << item
+      else
+        instances_to_create << item
+      end
+    end
+
+    if instances_to_create.any?
+      target_model.insert_all(instances_to_create.map { |attributes|
+        attributes.merge!(created_at: Time.now, updated_at: Time.now)
+      }, unique_by: ['reference'])
+    end
+
+    if instances_to_update.any?
+      target_model.upsert_all(instances_to_update.map { |attributes|
+        attributes.merge!(created_at: Time.now, updated_at: Time.now)
+      }, unique_by: %i[reference])
+    end
   end
 end
